@@ -1,0 +1,963 @@
+{% extends 'paginas/modelo.html' %}
+
+{% block titulo %}
+<title>Jogos</title>
+{% endblock %}
+
+{% block conteudo %}
+
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
+    <h1 class="h2"><i class="far fa-futbol text-info fa-xs"></i> Jogos</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <div class="btn-group mr-2">
+            <a href="{% url 'cadastrar-jogo' %}"><button type="button" class="btn btn-sm btn-outline-success">Cadastrar</button></a>
+        </div>
+    </div>
+</div>
+
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li {% if message.tags %} class="alert alert-{{message.tags}}"{% endif %}>{{message}}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+<hr>
+<div class="accordion" id="accordionExample">
+    <!-- Janeiro -->
+    <div class="card">
+        <div class="card-header" id="headingTwo">
+            <h2 class="mb-0">
+            <button class="btn btn-block text-left collapsed text-primary" type="button" data-toggle="collapse" data-target="#janeiro" aria-expanded="false" aria-controls="janeiro">
+                Janeiro
+            </button>
+            </h2>
+        </div>
+  
+        <div id="janeiro" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+            <div class="card-body text-center">
+                {% if jan_vazio %}
+                    {% for jogo in jogos %}
+                        {% if jogo.data_partida|date:"m" == '01' %}
+                        <div class="card mb-3 mr-3" style="display: inline-block; width: 250px;">
+                            <div class="card-header bg-dark d-flex justify-content-center">
+                                <h6 class="m-0 text-white">
+                                    {{jogo.data_partida|date:"d/m/Y"}} - {{jogo.hora}}
+                                </h6>
+                            </div>
+                            <!-- <div class="card-header p-1 bg-ligth text-center">
+                                {% if jogo.arbitro %}
+                                <span class="m-0 font-weight-bold"><i class="fas fa-fist-raised"></i> </i>{{jogo.arbitro}}</span><br>
+                                {% else %}
+                                -
+                                {% endif %}
+                            </div> -->
+                            <div class="card-body d-flex justify-content-between p-2">
+                                <table class="table table-bordered m-0 border-round">
+                                    <tbody>
+                                        <tr>
+                                            <td class="team-name text-primary" style="font-weight: bolder; width: 190px;"><h6>Nonô FC</h6></td>
+                                            {% if jogo.gols_favor == None %}
+                                            <td class="scoreboard-number text-primary" style="font-weight: bolder; width: 40px;">-</td>
+                                            {% elif jogo.gols_favor %}
+                                            <td class="scoreboard-number text-primary" style="font-weight: bolder; width: 40px;">{{jogo.gols_favor}}</td>
+                                            {% else %}
+                                            <td class="scoreboard-number text-primary" style="font-weight: bolder; width: 40px;">0</td>
+                                            {% endif %}
+                                        </tr>
+                                        <tr>
+                                            {% if jogo.time == None %}
+                                            <td class="team-name text-danger" style="font-weight: bolder;">-</td>
+                                            {% else %}
+                                            <td class="team-name text-danger" style="font-weight: bolder;">{{jogo.time}}</td>
+                                            {% endif %}
+                                            {% if jogo.gols_contra %}
+                                            <td class="scoreboard-number text-danger" style="font-weight: bolder;">{{jogo.gols_contra}}</td>
+                                            {% elif jogo.gols_contra == 0 %}
+                                            <td class="scoreboard-number text-danger" style="font-weight: bolder;">0</td>
+                                            {% else %}
+                                            <td class="scoreboard-number text-dangher" style="font-weight: bolder;">-</td>
+                                            {% endif %}
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="card-header p-1 bg-ligth text-center">
+                                <a href="{% url 'editar-jogo' jogo.id %}" title="Editar"><i class="far fa-edit text-warning mr-2"></i></a>
+                                <a href="{% url 'deletar-jogo' jogo.id %}" title="Deletar" class="btn-deletar" title="Excluir"><i class="fas fa-trash-alt text-danger mr-2"></i></a>
+                                {% if jogo.time == None %}
+                                <a href="" data-toggle="modal" data-target="" title="Favor"><i class="far fa-futbol text-success opacidade mr-2"></i></a>
+                                {% else %}
+                                <a href="" data-toggle="modal" data-target="#modal-gols-jan{{jogo.id}}" title="Favor"><i class="far fa-futbol text-success mr-2"></i></a>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endif %}
+                    {% include 'cadastros/modal/modal-gols-jan.html' %}
+                    {% endfor %}
+                {% else %}
+                    <p class="text-left">Nenhum jogo cadastrado.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <!-- Fevereiro -->
+    <div class="card">
+        <div class="card-header" id="headingTwo">
+            <h2 class="mb-0">
+            <button class="btn btn-block text-left collapsed text-primary" type="button" data-toggle="collapse" data-target="#fevereiro" aria-expanded="false" aria-controls="collapseTwo">
+                Fevereiro
+            </button>
+            </h2>
+        </div>
+        <div id="fevereiro" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+            <div class="card-body text-center">
+                {% if fev_vazio %}
+                    {% for jogo in jogos %}
+                        {% if jogo.data_partida|date:"m" == '02' %}
+                        <div class="card mb-3 mr-3" style="display: inline-block;">
+                            <div class="card-header bg-dark d-flex justify-content-center">
+                                <h6 class="m-0 text-white">
+                                    {{jogo.data_partida|date:"d/m/Y"}} - {{jogo.hora}} 
+                                </h6>
+                            </div>
+                            <!-- <div class="card-header p-1 bg-ligth text-center">
+                                {% if jogo.arbitro %}
+                                <span class="m-0 font-weight-bold"><i class="fas fa-fist-raised"></i> </i>{{jogo.arbitro}}</span><br>
+                                {% else %}
+                                -
+                                {% endif %}
+                            </div> -->
+                            <div class="card-body d-flex justify-content-between p-2">
+                                <table class="table table-bordered m-0 border-round">
+                                    <tbody>
+                                        <tr>
+                                            <td class="team-name text-primary" style="font-weight: bolder; width: 190px;"><h6>Nonô FC</h6></td>
+                                            {% if jogo.gols_favor == None %}
+                                            <td class="scoreboard-number text-primary" style="font-weight: bolder; width: 40px;">-</td>
+                                            {% elif jogo.gols_favor %}
+                                            <td class="scoreboard-number text-primary" style="font-weight: bolder; width: 40px;">{{jogo.gols_favor}}</td>
+                                            {% else %}
+                                            <td class="scoreboard-number text-primary" style="font-weight: bolder; width: 40px;">0</td>
+                                            {% endif %}
+                                        </tr>
+                                        <tr>
+                                            {% if jogo.time == None %}
+                                            <td class="team-name text-danger" style="font-weight: bolder;">-</td>
+                                            {% else %}
+                                            <td class="team-name text-danger" style="font-weight: bolder;">{{jogo.time}}</td>
+                                            {% endif %}
+                                            {% if jogo.gols_contra %}
+                                            <td class="scoreboard-number text-danger" style="font-weight: bolder;">{{jogo.gols_contra}}</td>
+                                            {% elif  jogo.gols_contra == 0 %}
+                                            <td class="scoreboard-number text-danger" style="font-weight: bolder;">0</td>
+                                            {% else %}
+                                            <td class="scoreboard-number text-danger" style="font-weight: bolder;">-</td>
+                                            {% endif %}
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="card-header p-1 bg-ligth text-center">
+                                <a href="{% url 'editar-jogo' jogo.id %}" title="Editar"><i class="far fa-edit text-warning mr-2"></i></a>
+                                <a href="{% url 'deletar-jogo' jogo.id %}" title="Deletar" class="btn-deletar" title="Excluir"><i class="fas fa-trash-alt text-danger mr-2"></i></a>
+                                {% if jogo.time == None %}
+                                <a href="" data-toggle="modal" data-target="" title="Favor"><i class="far fa-futbol text-success opacidade mr-2"></i></a>
+                                {% else %}
+                                <a href="" data-toggle="modal" data-target="#modal-gols-fev{{jogo.id}}" title="Favor"><i class="far fa-futbol text-success mr-2"></i></a>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endif %}
+                    {% include 'cadastros/modal/modal-gols-fev.html' %}
+                    {% endfor %}
+                {% else %}
+                    <p class="text-left">Nenhum jogo cadastrado.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Março -->
+    <div class="card">
+        <div class="card-header" id="headingThree">
+            <h2 class="mb-0">
+            <button class="btn btn-block text-left collapsed text-primary" type="button" data-toggle="collapse" data-target="#marco" aria-expanded="false" aria-controls="collapseThree">
+                Março
+            </button>
+            </h2>
+        </div>
+        <div id="marco" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+            <div class="card-body text-center">
+                {% if mar_vazio %}
+                    {% for jogo in jogos %}
+                        {% if jogo.data_partida|date:"m" == '03' %}
+                        <div class="card mb-3 mr-3" style="display: inline-block;">
+                            <div class="card-header bg-dark d-flex justify-content-center">
+                                <h6 class="m-0 text-white">
+                                    {{jogo.data_partida|date:"d/m/Y"}} - {{jogo.hora}} 
+                                </h6>
+                            </div>
+                           <!-- <div class="card-header p-1 bg-ligth text-center">
+                                {% if jogo.arbitro %}
+                                <span class="m-0 font-weight-bold"><i class="fas fa-fist-raised"></i> </i>{{jogo.arbitro}}</span><br>
+                                {% else %}
+                                -
+                                {% endif %}
+                            </div> -->
+                            <div class="card-body d-flex justify-content-between p-2">
+                                <table class="table table-bordered m-0 border-round">
+                                    <tbody>
+                                        <tr>
+                                            <td class="team-name text-primary" style="font-weight: bolder; width: 190px;"><h6>Nonô FC</h6></td>
+                                            {% if jogo.gols_favor == None %}
+                                            <td class="scoreboard-number text-primary" style="font-weight: bolder; width: 40px;">-</td>
+                                            {% elif jogo.gols_favor %}
+                                            <td class="scoreboard-number text-primary" style="font-weight: bolder; width: 40px;">{{jogo.gols_favor}}</td>
+                                            {% else %}
+                                            <td class="scoreboard-number text-primary" style="font-weight: bolder; width: 40px;">0</td>
+                                            {% endif %}
+                                        </tr>
+                                        <tr>
+                                            {% if jogo.time == None %}
+                                            <td class="team-name text-danger" style="font-weight: bolder;">-</td>
+                                            {% else %}
+                                            <td class="team-name text-danger" style="font-weight: bolder;">{{jogo.time}}</td>
+                                            {% endif %}
+                                            {% if jogo.gols_contra %}
+                                            <td class="scoreboard-number text-danger" style="font-weight: bolder;">{{jogo.gols_contra}}</td>
+                                            {% elif  jogo.gols_contra == 0 %}
+                                            <td class="scoreboard-number text-danger" style="font-weight: bolder;">0</td>
+                                            {% else %}
+                                            <td class="scoreboard-number text-danger" style="font-weight: bolder;">-</td>
+                                            {% endif %}
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="card-header p-1 bg-ligth text-center">
+                                <a href="{% url 'editar-jogo' jogo.id %}" title="Editar"><i class="far fa-edit text-warning mr-2"></i></a>
+                                <a href="{% url 'deletar-jogo' jogo.id %}" title="Deletar" class="btn-deletar" title="Excluir"><i class="fas fa-trash-alt text-danger mr-2"></i></a>
+                                {% if jogo.time == None %}
+                                <a href="" data-toggle="modal" data-target="" title="Favor"><i class="far fa-futbol text-success opacidade mr-2"></i></a>
+                                {% else %}
+                                <a href="" data-toggle="modal" data-target="#modal-gols-mar{{jogo.id}}" title="Favor"><i class="far fa-futbol text-success mr-2"></i></a>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% include 'cadastros/modal/modal-gols-mar.html' %}
+                    {% endfor %}
+                {% else %}
+                    <p class="text-left">Nenhum jogo cadastrado.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Abril -->
+    <div class="card">
+        <div class="card-header" id="headingThree">
+            <h2 class="mb-0">
+            <button class="btn btn-block text-left collapsed text-primary" type="button" data-toggle="collapse" data-target="#abril" aria-expanded="false" aria-controls="collapseThree">
+                Abril
+            </button>
+            </h2>
+        </div>
+        <div id="abril" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+            <div class="card-body text-center">
+                {% if abr_vazio %}
+                    {% for jogo in jogos %}
+                        {% if jogo.data_partida|date:"m" == '04' %}
+                        <div class="card mb-3 mr-3" style="display: inline-block;">
+                            <div class="card-header bg-dark d-flex justify-content-center">
+                                <h6 class="m-0 text-white">
+                                    {{jogo.data_partida|date:"d/m/Y"}} - {{jogo.hora}} 
+                                </h6>
+                            </div>
+                           <!-- <div class="card-header p-1 bg-ligth text-center">
+                                {% if jogo.arbitro %}
+                                <span class="m-0 font-weight-bold"><i class="fas fa-fist-raised"></i> </i>{{jogo.arbitro}}</span><br>
+                                {% else %}
+                                -
+                                {% endif %}
+                            </div> -->
+                            <div class="card-body d-flex justify-content-between p-2">
+                                <table class="table table-bordered m-0 border-round">
+                                    <tbody>
+                                        <tr>
+                                            <td class="team-name text-primary" style="font-weight: bolder; width: 190px;"><h6>Nonô FC</h6></td>
+                                            {% if jogo.gols_favor == None %}
+                                            <td class="scoreboard-number text-primary" style="font-weight: bolder; width: 40px;">-</td>
+                                            {% elif jogo.gols_favor %}
+                                            <td class="scoreboard-number text-primary" style="font-weight: bolder; width: 40px;">{{jogo.gols_favor}}</td>
+                                            {% else %}
+                                            <td class="scoreboard-number text-primary" style="font-weight: bolder; width: 40px;">0</td>
+                                            {% endif %}
+                                        </tr>
+                                        <tr>
+                                            {% if jogo.time == None %}
+                                            <td class="team-name text-danger" style="font-weight: bolder;">-</td>
+                                            {% else %}
+                                            <td class="team-name text-danger" style="font-weight: bolder;">{{jogo.time}}</td>
+                                            {% endif %}
+                                            {% if jogo.gols_contra %}
+                                            <td class="scoreboard-number text-danger" style="font-weight: bolder;">{{jogo.gols_contra}}</td>
+                                            {% elif  jogo.gols_contra == 0 %}
+                                            <td class="scoreboard-number text-danger" style="font-weight: bolder;">0</td>
+                                            {% else %}
+                                            <td class="scoreboard-number text-danger" style="font-weight: bolder;">-</td>
+                                            {% endif %}
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="card-header p-1 bg-ligth text-center">
+                                <a href="{% url 'editar-jogo' jogo.id %}" title="Editar"><i class="far fa-edit text-warning mr-2"></i></a>
+                                <a href="{% url 'deletar-jogo' jogo.id %}" title="Deletar" class="btn-deletar" title="Excluir"><i class="fas fa-trash-alt text-danger mr-2"></i></a>
+                                {% if jogo.time == None %}
+                                <a href="" data-toggle="modal" data-target="" title="Favor"><i class="far fa-futbol text-success opacidade mr-2"></i></a>
+                                {% else %}
+                                <a href="" data-toggle="modal" data-target="#modal-gols-abr{{jogo.id}}" title="Favor"><i class="far fa-futbol text-success mr-2"></i></a>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% include 'cadastros/modal/modal-gols-abr.html' %}
+                        
+                    {% endfor %}
+                {% else %}
+                    <p class="text-left">Nenhum jogo cadastrado.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Maio -->
+    <div class="card">
+        <div class="card-header" id="headingThree">
+            <h2 class="mb-0">
+            <button class="btn btn-block text-left collapsed text-primary" type="button" data-toggle="collapse" data-target="#maio" aria-expanded="false" aria-controls="collapseThree">
+                Maio
+            </button>
+            </h2>
+        </div>
+        <div id="maio" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+            <div class="card-body text-center">
+                {% if mai_vazio %}
+                    {% for jogo in jogos %}
+                        {% if jogo.data_partida|date:"m" == '05' %}
+                        <div class="card mb-3 mr-3" style="display: inline-block;">
+                            <div class="card-header bg-dark d-flex justify-content-center">
+                                <h6 class="m-0 text-white">
+                                    {{jogo.data_partida|date:"d/m/Y"}} - {{jogo.hora}} 
+                                </h6>
+                            </div>
+                           <!-- <div class="card-header p-1 bg-ligth text-center">
+                                {% if jogo.arbitro %}
+                                <span class="m-0 font-weight-bold"><i class="fas fa-fist-raised"></i> </i>{{jogo.arbitro}}</span><br>
+                                {% else %}
+                                -
+                                {% endif %}
+                            </div> -->
+                            <div class="card-body d-flex justify-content-between p-2">
+                                <table class="table table-bordered m-0 border-round">
+                                    <tbody>
+                                        <tr>
+                                            <td class="team-name text-primary" style="font-weight: bolder; width: 190px;"><h6>Nonô FC</h6></td>
+                                            {% if jogo.gols_favor == None %}
+                                            <td class="scoreboard-number text-primary" style="font-weight: bolder; width: 40px;">-</td>
+                                            {% elif jogo.gols_favor %}
+                                            <td class="scoreboard-number text-primary" style="font-weight: bolder; width: 40px;">{{jogo.gols_favor}}</td>
+                                            {% else %}
+                                            <td class="scoreboard-number text-primary" style="font-weight: bolder; width: 40px;">0</td>
+                                            {% endif %}
+                                        </tr>
+                                        <tr>
+                                            {% if jogo.time == None %}
+                                            <td class="team-name text-danger" style="font-weight: bolder;">-</td>
+                                            {% else %}
+                                            <td class="team-name text-danger" style="font-weight: bolder;">{{jogo.time}}</td>
+                                            {% endif %}
+                                            {% if jogo.gols_contra %}
+                                            <td class="scoreboard-number text-danger" style="font-weight: bolder;">{{jogo.gols_contra}}</td>
+                                            {% elif  jogo.gols_contra == 0 %}
+                                            <td class="scoreboard-number text-danger" style="font-weight: bolder;">0</td>
+                                            {% else %}
+                                            <td class="scoreboard-number text-danger" style="font-weight: bolder;">-</td>
+                                            {% endif %}
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="card-header p-1 bg-ligth text-center">
+                                <a href="{% url 'editar-jogo' jogo.id %}" title="Editar"><i class="far fa-edit text-warning mr-2"></i></a>
+                                <a href="{% url 'deletar-jogo' jogo.id %}" title="Deletar" class="btn-deletar" title="Excluir"><i class="fas fa-trash-alt text-danger mr-2"></i></a>
+                                {% if jogo.time == None %}
+                                <a href="" data-toggle="modal" data-target="" title="Favor"><i class="far fa-futbol text-success opacidade mr-2"></i></a>
+                                {% else %}
+                                <a href="" data-toggle="modal" data-target="#modal-gols-mai{{jogo.id}}" title="Favor"><i class="far fa-futbol text-success mr-2"></i></a>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% include 'cadastros/modal/modal-gols-mai.html' %}
+                        
+                    {% endfor %}
+                {% else %}
+                    <p class="text-left">Nenhum jogo cadastrado.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Março -->
+    <div class="card">
+        <div class="card-header" id="headingThree">
+            <h2 class="mb-0">
+            <button class="btn btn-block text-left collapsed text-primary" type="button" data-toggle="collapse" data-target="#junho" aria-expanded="false" aria-controls="collapseThree">
+                Junho
+            </button>
+            </h2>
+        </div>
+        <div id="junho" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+            <div class="card-body text-center">
+                {% if jun_vazio %}
+                    {% for jogo in jogos %}
+                        {% if jogo.data_partida|date:"m" == '06' %}
+                        <div class="card mb-3 mr-3" style="display: inline-block;">
+                            <div class="card-header bg-dark d-flex justify-content-center">
+                                <h6 class="m-0 text-white">
+                                    {{jogo.data_partida|date:"d/m/Y"}} - {{jogo.hora}} 
+                                </h6>
+                            </div>
+                           <!-- <div class="card-header p-1 bg-ligth text-center">
+                                {% if jogo.arbitro %}
+                                <span class="m-0 font-weight-bold"><i class="fas fa-fist-raised"></i> </i>{{jogo.arbitro}}</span><br>
+                                {% else %}
+                                -
+                                {% endif %}
+                            </div> -->
+                            <div class="card-body d-flex justify-content-between p-2">
+                                <table class="table table-bordered m-0 border-round">
+                                    <tbody>
+                                        <tr>
+                                            <td class="team-name text-primary" style="font-weight: bolder; width: 190px;"><h6>Nonô FC</h6></td>
+                                            {% if jogo.gols_favor == None %}
+                                            <td class="scoreboard-number text-primary" style="font-weight: bolder; width: 40px;">-</td>
+                                            {% elif jogo.gols_favor %}
+                                            <td class="scoreboard-number text-primary" style="font-weight: bolder; width: 40px;">{{jogo.gols_favor}}</td>
+                                            {% else %}
+                                            <td class="scoreboard-number text-primary" style="font-weight: bolder; width: 40px;">0</td>
+                                            {% endif %}
+                                        </tr>
+                                        <tr>
+                                            {% if jogo.time == None %}
+                                            <td class="team-name text-danger" style="font-weight: bolder;">-</td>
+                                            {% else %}
+                                            <td class="team-name text-danger" style="font-weight: bolder;">{{jogo.time}}</td>
+                                            {% endif %}
+                                            {% if jogo.gols_contra %}
+                                            <td class="scoreboard-number text-danger" style="font-weight: bolder;">{{jogo.gols_contra}}</td>
+                                            {% elif  jogo.gols_contra == 0 %}
+                                            <td class="scoreboard-number text-danger" style="font-weight: bolder;">0</td>
+                                            {% else %}
+                                            <td class="scoreboard-number text-danger" style="font-weight: bolder;">-</td>
+                                            {% endif %}
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="card-header p-1 bg-ligth text-center">
+                                <a href="{% url 'editar-jogo' jogo.id %}" title="Editar"><i class="far fa-edit text-warning mr-2"></i></a>
+                                <a href="{% url 'deletar-jogo' jogo.id %}" title="Deletar" class="btn-deletar" title="Excluir"><i class="fas fa-trash-alt text-danger mr-2"></i></a>
+                                {% if jogo.time == None %}
+                                <a href="" data-toggle="modal" data-target="" title="Favor"><i class="far fa-futbol text-success opacidade mr-2"></i></a>
+                                {% else %}
+                                <a href="" data-toggle="modal" data-target="#modal-gols-jun{{jogo.id}}" title="Favor"><i class="far fa-futbol text-success mr-2"></i></a>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% include 'cadastros/modal/modal-gols-jun.html' %}
+                        
+                    {% endfor %}
+                {% else %}
+                    <p class="text-left">Nenhum jogo cadastrado.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Julho -->
+    <div class="card">
+        <div class="card-header" id="headingThree">
+            <h2 class="mb-0">
+            <button class="btn btn-block text-left collapsed text-primary" type="button" data-toggle="collapse" data-target="#julho" aria-expanded="false" aria-controls="collapseThree">
+                Julho
+            </button>
+            </h2>
+        </div>
+        <div id="julho" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+            <div class="card-body text-center">
+                {% if jul_vazio %}
+                    {% for jogo in jogos %}
+                        {% if jogo.data_partida|date:"m" == '07' %}
+                        <div class="card mb-3 mr-3" style="display: inline-block;">
+                            <div class="card-header bg-dark d-flex justify-content-center">
+                                <h6 class="m-0 text-white">
+                                    {{jogo.data_partida|date:"d/m/Y"}} - {{jogo.hora}} 
+                                </h6>
+                            </div>
+                           <!-- <div class="card-header p-1 bg-ligth text-center">
+                                {% if jogo.arbitro %}
+                                <span class="m-0 font-weight-bold"><i class="fas fa-fist-raised"></i> </i>{{jogo.arbitro}}</span><br>
+                                {% else %}
+                                -
+                                {% endif %}
+                            </div> -->
+                            <div class="card-body d-flex justify-content-between p-2">
+                                <table class="table table-bordered m-0 border-round">
+                                    <tbody>
+                                        <tr>
+                                            <td class="team-name text-primary" style="font-weight: bolder; width: 190px;"><h6>Nonô FC</h6></td>
+                                            {% if jogo.gols_favor == None %}
+                                            <td class="scoreboard-number text-primary" style="font-weight: bolder; width: 40px;">-</td>
+                                            {% elif jogo.gols_favor %}
+                                            <td class="scoreboard-number text-primary" style="font-weight: bolder; width: 40px;">{{jogo.gols_favor}}</td>
+                                            {% else %}
+                                            <td class="scoreboard-number text-primary" style="font-weight: bolder; width: 40px;">0</td>
+                                            {% endif %}
+                                        </tr>
+                                        <tr>
+                                            {% if jogo.time == None %}
+                                            <td class="team-name text-danger" style="font-weight: bolder;">-</td>
+                                            {% else %}
+                                            <td class="team-name text-danger" style="font-weight: bolder;">{{jogo.time}}</td>
+                                            {% endif %}
+                                            {% if jogo.gols_contra %}
+                                            <td class="scoreboard-number text-danger" style="font-weight: bolder;">{{jogo.gols_contra}}</td>
+                                            {% elif  jogo.gols_contra == 0 %}
+                                            <td class="scoreboard-number text-danger" style="font-weight: bolder;">0</td>
+                                            {% else %}
+                                            <td class="scoreboard-number text-danger" style="font-weight: bolder;">-</td>
+                                            {% endif %}
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="card-header p-1 bg-ligth text-center">
+                                <a href="{% url 'editar-jogo' jogo.id %}" title="Editar"><i class="far fa-edit text-warning mr-2"></i></a>
+                                <a href="{% url 'deletar-jogo' jogo.id %}" title="Deletar" class="btn-deletar" title="Excluir"><i class="fas fa-trash-alt text-danger mr-2"></i></a>
+                                {% if jogo.time == None %}
+                                <a href="" data-toggle="modal" data-target="" title="Favor"><i class="far fa-futbol text-success opacidade mr-2"></i></a>
+                                {% else %}
+                                <a href="" data-toggle="modal" data-target="#modal-gols-jul{{jogo.id}}" title="Favor"><i class="far fa-futbol text-success mr-2"></i></a>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% include 'cadastros/modal/modal-gols-jul.html' %}
+                        
+                    {% endfor %}
+                {% else %}
+                    <p class="text-left">Nenhum jogo cadastrado.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Agosto -->
+    <div class="card">
+        <div class="card-header" id="headingThree">
+            <h2 class="mb-0">
+            <button class="btn btn-block text-left collapsed text-primary" type="button" data-toggle="collapse" data-target="#agosto" aria-expanded="false" aria-controls="collapseThree">
+                Agosto
+            </button>
+            </h2>
+        </div>
+        <div id="agosto" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+            <div class="card-body text-center">
+                {% if ago_vazio %}
+                    {% for jogo in jogos %}
+                        {% if jogo.data_partida|date:"m" == '08' %}
+                        <div class="card mb-3 mr-3" style="display: inline-block;">
+                            <div class="card-header bg-dark d-flex justify-content-center">
+                                <h6 class="m-0 text-white">
+                                    {{jogo.data_partida|date:"d/m/Y"}} - {{jogo.hora}} 
+                                </h6>
+                            </div>
+                           <!-- <div class="card-header p-1 bg-ligth text-center">
+                                {% if jogo.arbitro %}
+                                <span class="m-0 font-weight-bold"><i class="fas fa-fist-raised"></i> </i>{{jogo.arbitro}}</span><br>
+                                {% else %}
+                                -
+                                {% endif %}
+                            </div> -->
+                            <div class="card-body d-flex justify-content-between p-2">
+                                <table class="table table-bordered m-0 border-round">
+                                    <tbody>
+                                        <tr>
+                                            <td class="team-name text-primary" style="font-weight: bolder; width: 190px;"><h6>Nonô FC</h6></td>
+                                            {% if jogo.gols_favor == None %}
+                                            <td class="scoreboard-number text-primary" style="font-weight: bolder; width: 40px;">-</td>
+                                            {% elif jogo.gols_favor %}
+                                            <td class="scoreboard-number text-primary" style="font-weight: bolder; width: 40px;">{{jogo.gols_favor}}</td>
+                                            {% else %}
+                                            <td class="scoreboard-number text-primary" style="font-weight: bolder; width: 40px;">0</td>
+                                            {% endif %}
+                                        </tr>
+                                        <tr>
+                                            {% if jogo.time == None %}
+                                            <td class="team-name text-danger" style="font-weight: bolder;">-</td>
+                                            {% else %}
+                                            <td class="team-name text-danger" style="font-weight: bolder;">{{jogo.time}}</td>
+                                            {% endif %}
+                                            {% if jogo.gols_contra %}
+                                            <td class="scoreboard-number text-danger" style="font-weight: bolder;">{{jogo.gols_contra}}</td>
+                                            {% elif  jogo.gols_contra == 0 %}
+                                            <td class="scoreboard-number text-danger" style="font-weight: bolder;">0</td>
+                                            {% else %}
+                                            <td class="scoreboard-number text-danger" style="font-weight: bolder;">-</td>
+                                            {% endif %}
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="card-header p-1 bg-ligth text-center">
+                                <a href="{% url 'editar-jogo' jogo.id %}" title="Editar"><i class="far fa-edit text-warning mr-2"></i></a>
+                                <a href="{% url 'deletar-jogo' jogo.id %}" title="Deletar" class="btn-deletar" title="Excluir"><i class="fas fa-trash-alt text-danger mr-2"></i></a>
+                                {% if jogo.time == None %}
+                                <a href="" data-toggle="modal" data-target="" title="Favor"><i class="far fa-futbol text-success opacidade mr-2"></i></a>
+                                {% else %}
+                                <a href="" data-toggle="modal" data-target="#modal-gols-ago{{jogo.id}}" title="Favor"><i class="far fa-futbol text-success mr-2"></i></a>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% include 'cadastros/modal/modal-gols-ago.html' %}
+                        
+                    {% endfor %}
+                {% else %}
+                    <p class="text-left">Nenhum jogo cadastrado.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Setembro -->
+    <div class="card">
+        <div class="card-header" id="headingThree">
+            <h2 class="mb-0">
+            <button class="btn btn-block text-left collapsed text-primary" type="button" data-toggle="collapse" data-target="#setembro" aria-expanded="false" aria-controls="collapseThree">
+                Setembro
+            </button>
+            </h2>
+        </div>
+        <div id="setembro" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+            <div class="card-body text-center">
+                {% if set_vazio %}
+                    {% for jogo in jogos %}
+                        {% if jogo.data_partida|date:"m" == '09' %}
+                        <div class="card mb-3 mr-3" style="display: inline-block;">
+                            <div class="card-header bg-dark d-flex justify-content-center">
+                                <h6 class="m-0 text-white">
+                                    {{jogo.data_partida|date:"d/m/Y"}} - {{jogo.hora}} 
+                                </h6>
+                            </div>
+                           <!-- <div class="card-header p-1 bg-ligth text-center">
+                                {% if jogo.arbitro %}
+                                <span class="m-0 font-weight-bold"><i class="fas fa-fist-raised"></i> </i>{{jogo.arbitro}}</span><br>
+                                {% else %}
+                                -
+                                {% endif %}
+                            </div> -->
+                            <div class="card-body d-flex justify-content-between p-2">
+                                <table class="table table-bordered m-0 border-round">
+                                    <tbody>
+                                        <tr>
+                                            <td class="team-name text-primary" style="font-weight: bolder; width: 190px;"><h6>Nonô FC</h6></td>
+                                            {% if jogo.gols_favor == None %}
+                                            <td class="scoreboard-number text-primary" style="font-weight: bolder; width: 40px;">-</td>
+                                            {% elif jogo.gols_favor %}
+                                            <td class="scoreboard-number text-primary" style="font-weight: bolder; width: 40px;">{{jogo.gols_favor}}</td>
+                                            {% else %}
+                                            <td class="scoreboard-number text-primary" style="font-weight: bolder; width: 40px;">0</td>
+                                            {% endif %}
+                                        </tr>
+                                        <tr>
+                                            {% if jogo.time == None %}
+                                            <td class="team-name text-danger" style="font-weight: bolder;">-</td>
+                                            {% else %}
+                                            <td class="team-name text-danger" style="font-weight: bolder;">{{jogo.time}}</td>
+                                            {% endif %}
+                                            {% if jogo.gols_contra %}
+                                            <td class="scoreboard-number text-danger" style="font-weight: bolder;">{{jogo.gols_contra}}</td>
+                                            {% elif  jogo.gols_contra == 0 %}
+                                            <td class="scoreboard-number text-danger" style="font-weight: bolder;">0</td>
+                                            {% else %}
+                                            <td class="scoreboard-number text-danger" style="font-weight: bolder;">-</td>
+                                            {% endif %}
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="card-header p-1 bg-ligth text-center">
+                                <a href="{% url 'editar-jogo' jogo.id %}" title="Editar"><i class="far fa-edit text-warning mr-2"></i></a>
+                                <a href="{% url 'deletar-jogo' jogo.id %}" title="Deletar" class="btn-deletar" title="Excluir"><i class="fas fa-trash-alt text-danger mr-2"></i></a>
+                                {% if jogo.time == None %}
+                                <a href="" data-toggle="modal" data-target="" title="Favor"><i class="far fa-futbol text-success opacidade mr-2"></i></a>
+                                {% else %}
+                                <a href="" data-toggle="modal" data-target="#modal-gols-set{{jogo.id}}" title="Favor"><i class="far fa-futbol text-success mr-2"></i></a>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% include 'cadastros/modal/modal-gols-set.html' %}
+                        
+                    {% endfor %}
+                {% else %}
+                    <p class="text-left">Nenhum jogo cadastrado.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Outubro -->
+    <div class="card">
+        <div class="card-header" id="headingThree">
+            <h2 class="mb-0">
+            <button class="btn btn-block text-left collapsed text-primary" type="button" data-toggle="collapse" data-target="#outubro" aria-expanded="false" aria-controls="collapseThree">
+                Outubro
+            </button>
+            </h2>
+        </div>
+        <div id="outubro" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+            <div class="card-body text-center">
+                {% if out_vazio %}
+                    {% for jogo in jogos %}
+                        {% if jogo.data_partida|date:"m" == '10' %}
+                        <div class="card mb-3 mr-3" style="display: inline-block;">
+                            <div class="card-header bg-dark d-flex justify-content-center">
+                                <h6 class="m-0 text-white">
+                                    {{jogo.data_partida|date:"d/m/Y"}} - {{jogo.hora}} 
+                                </h6>
+                            </div>
+                           <!-- <div class="card-header p-1 bg-ligth text-center">
+                                {% if jogo.arbitro %}
+                                <span class="m-0 font-weight-bold"><i class="fas fa-fist-raised"></i> </i>{{jogo.arbitro}}</span><br>
+                                {% else %}
+                                -
+                                {% endif %}
+                            </div> -->
+                            <div class="card-body d-flex justify-content-between p-2">
+                                <table class="table table-bordered m-0 border-round">
+                                    <tbody>
+                                        <tr>
+                                            <td class="team-name text-primary" style="font-weight: bolder; width: 190px;"><h6>Nonô FC</h6></td>
+                                            {% if jogo.gols_favor == None %}
+                                            <td class="scoreboard-number text-primary" style="font-weight: bolder; width: 40px;">-</td>
+                                            {% elif jogo.gols_favor %}
+                                            <td class="scoreboard-number text-primary" style="font-weight: bolder; width: 40px;">{{jogo.gols_favor}}</td>
+                                            {% else %}
+                                            <td class="scoreboard-number text-primary" style="font-weight: bolder; width: 40px;">0</td>
+                                            {% endif %}
+                                        </tr>
+                                        <tr>
+                                            {% if jogo.time == None %}
+                                            <td class="team-name text-danger" style="font-weight: bolder;">-</td>
+                                            {% else %}
+                                            <td class="team-name text-danger" style="font-weight: bolder;">{{jogo.time}}</td>
+                                            {% endif %}
+                                            {% if jogo.gols_contra %}
+                                            <td class="scoreboard-number text-danger" style="font-weight: bolder;">{{jogo.gols_contra}}</td>
+                                            {% elif  jogo.gols_contra == 0 %}
+                                            <td class="scoreboard-number text-danger" style="font-weight: bolder;">0</td>
+                                            {% else %}
+                                            <td class="scoreboard-number text-danger" style="font-weight: bolder;">-</td>
+                                            {% endif %}
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="card-header p-1 bg-ligth text-center">
+                                <a href="{% url 'editar-jogo' jogo.id %}" title="Editar"><i class="far fa-edit text-warning mr-2"></i></a>
+                                <a href="{% url 'deletar-jogo' jogo.id %}" title="Deletar" class="btn-deletar" title="Excluir"><i class="fas fa-trash-alt text-danger mr-2"></i></a>
+                                {% if jogo.time == None %}
+                                <a href="" data-toggle="modal" data-target="" title="Favor"><i class="far fa-futbol text-success opacidade mr-2"></i></a>
+                                {% else %}
+                                <a href="" data-toggle="modal" data-target="#modal-gols-out{{jogo.id}}" title="Favor"><i class="far fa-futbol text-success mr-2"></i></a>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% include 'cadastros/modal/modal-gols-out.html' %}
+                        
+                    {% endfor %}
+                {% else %}
+                    <p class="text-left">Nenhum jogo cadastrado.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Novembro -->
+    <div class="card">
+        <div class="card-header" id="headingThree">
+            <h2 class="mb-0">
+            <button class="btn btn-block text-left collapsed text-primary" type="button" data-toggle="collapse" data-target="#novembro" aria-expanded="false" aria-controls="collapseThree">
+                Novembro
+            </button>
+            </h2>
+        </div>
+        <div id="novembro" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+            <div class="card-body text-center">
+                {% if nov_vazio %}
+                    {% for jogo in jogos %}
+                        {% if jogo.data_partida|date:"m" == '11' %}
+                        <div class="card mb-3 mr-3" style="display: inline-block;">
+                            <div class="card-header bg-dark d-flex justify-content-center">
+                                <h6 class="m-0 text-white">
+                                    {{jogo.data_partida|date:"d/m/Y"}} - {{jogo.hora}} 
+                                </h6>
+                            </div>
+                           <!-- <div class="card-header p-1 bg-ligth text-center">
+                                {% if jogo.arbitro %}
+                                <span class="m-0 font-weight-bold"><i class="fas fa-fist-raised"></i> </i>{{jogo.arbitro}}</span><br>
+                                {% else %}
+                                -
+                                {% endif %}
+                            </div> -->
+                            <div class="card-body d-flex justify-content-between p-2">
+                                <table class="table table-bordered m-0 border-round">
+                                    <tbody>
+                                        <tr>
+                                            <td class="team-name text-primary" style="font-weight: bolder; width: 190px;"><h6>Nonô FC</h6></td>
+                                            {% if jogo.gols_favor == None %}
+                                            <td class="scoreboard-number text-primary" style="font-weight: bolder; width: 40px;">-</td>
+                                            {% elif jogo.gols_favor %}
+                                            <td class="scoreboard-number text-primary" style="font-weight: bolder; width: 40px;">{{jogo.gols_favor}}</td>
+                                            {% else %}
+                                            <td class="scoreboard-number text-primary" style="font-weight: bolder; width: 40px;">0</td>
+                                            {% endif %}
+                                        </tr>
+                                        <tr>
+                                            {% if jogo.time == None %}
+                                            <td class="team-name text-danger" style="font-weight: bolder;">-</td>
+                                            {% else %}
+                                            <td class="team-name text-danger" style="font-weight: bolder;">{{jogo.time}}</td>
+                                            {% endif %}
+                                            {% if jogo.gols_contra %}
+                                            <td class="scoreboard-number text-danger" style="font-weight: bolder;">{{jogo.gols_contra}}</td>
+                                            {% elif  jogo.gols_contra == 0 %}
+                                            <td class="scoreboard-number text-danger" style="font-weight: bolder;">0</td>
+                                            {% else %}
+                                            <td class="scoreboard-number text-danger" style="font-weight: bolder;">-</td>
+                                            {% endif %}
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="card-header p-1 bg-ligth text-center">
+                                <a href="{% url 'editar-jogo' jogo.id %}" title="Editar"><i class="far fa-edit text-warning mr-2"></i></a>
+                                <a href="{% url 'deletar-jogo' jogo.id %}" title="Deletar" class="btn-deletar" title="Excluir"><i class="fas fa-trash-alt text-danger mr-2"></i></a>
+                                {% if jogo.time == None %}
+                                <a href="" data-toggle="modal" data-target="" title="Favor"><i class="far fa-futbol text-success opacidade mr-2"></i></a>
+                                {% else %}
+                                <a href="" data-toggle="modal" data-target="#modal-gols-nov{{jogo.id}}" title="Favor"><i class="far fa-futbol text-success mr-2"></i></a>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% include 'cadastros/modal/modal-gols-nov.html' %}
+                        
+                    {% endfor %}
+                {% else %}
+                    <p class="text-left">Nenhum jogo cadastrado.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Dezembro -->
+    <div class="card">
+        <div class="card-header" id="headingThree">
+            <h2 class="mb-0">
+            <button class="btn btn-block text-left collapsed text-primary" type="button" data-toggle="collapse" data-target="#dezembro" aria-expanded="false" aria-controls="collapseThree">
+                dezembro
+            </button>
+            </h2>
+        </div>
+        <div id="dezembro" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+            <div class="card-body text-center">
+                {% if dez_vazio %}
+                    {% for jogo in jogos %}
+                        {% if jogo.data_partida|date:"m" == '12' %}
+                        <div class="card mb-3 mr-3" style="display: inline-block;">
+                            <div class="card-header bg-dark d-flex justify-content-center">
+                                <h6 class="m-0 text-white">
+                                    {{jogo.data_partida|date:"d/m/Y"}} - {{jogo.hora}} 
+                                </h6>
+                            </div>
+                           <!-- <div class="card-header p-1 bg-ligth text-center">
+                                {% if jogo.arbitro %}
+                                <span class="m-0 font-weight-bold"><i class="fas fa-fist-raised"></i> </i>{{jogo.arbitro}}</span><br>
+                                {% else %}
+                                -
+                                {% endif %}
+                            </div> -->
+                            <div class="card-body d-flex justify-content-between p-2">
+                                <table class="table table-bordered m-0 border-round">
+                                    <tbody>
+                                        <tr>
+                                            <td class="team-name text-primary" style="font-weight: bolder; width: 190px;"><h6>Nonô FC</h6></td>
+                                            {% if jogo.gols_favor == None %}
+                                            <td class="scoreboard-number text-primary" style="font-weight: bolder; width: 40px;">-</td>
+                                            {% elif jogo.gols_favor %}
+                                            <td class="scoreboard-number text-primary" style="font-weight: bolder; width: 40px;">{{jogo.gols_favor}}</td>
+                                            {% else %}
+                                            <td class="scoreboard-number text-primary" style="font-weight: bolder; width: 40px;">0</td>
+                                            {% endif %}
+                                        </tr>
+                                        <tr>
+                                            {% if jogo.time == None %}
+                                            <td class="team-name text-danger" style="font-weight: bolder;">-</td>
+                                            {% else %}
+                                            <td class="team-name text-danger" style="font-weight: bolder;">{{jogo.time}}</td>
+                                            {% endif %}
+                                            {% if jogo.gols_contra %}
+                                            <td class="scoreboard-number text-danger" style="font-weight: bolder;">{{jogo.gols_contra}}</td>
+                                            {% elif  jogo.gols_contra == 0 %}
+                                            <td class="scoreboard-number text-danger" style="font-weight: bolder;">0</td>
+                                            {% else %}
+                                            <td class="scoreboard-number text-danger" style="font-weight: bolder;">-</td>
+                                            {% endif %}
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="card-header p-1 bg-ligth text-center">
+                                <a href="{% url 'editar-jogo' jogo.id %}" title="Editar"><i class="far fa-edit text-warning mr-2"></i></a>
+                                <a href="{% url 'deletar-jogo' jogo.id %}" title="Deletar" class="btn-deletar" title="Excluir"><i class="fas fa-trash-alt text-danger mr-2"></i></a>
+                                {% if jogo.time == None %}
+                                <a href="" data-toggle="modal" data-target="" title="Favor"><i class="far fa-futbol text-success opacidade mr-2"></i></a>
+                                {% else %}
+                                <a href="" data-toggle="modal" data-target="#modal-gols-dez{{jogo.id}}" title="Favor"><i class="far fa-futbol text-success mr-2"></i></a>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% include 'cadastros/modal/modal-gols-dez.html' %}
+                        
+                    {% endfor %}
+                {% else %}
+                    <p class="text-left">Nenhum jogo cadastrado.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

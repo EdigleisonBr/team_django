@@ -1,0 +1,82 @@
+{% load static %}
+{% load crispy_forms_tags %}
+
+<!doctype html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Jekyll v4.1.1">
+    
+    {% block titulo %}
+    <title>Login</title>
+    {% endblock %}
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/dashboard/">
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">    
+    
+    <!-- Fontawesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css">
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
+
+    <!-- Custom styles for this template -->
+    <link rel="stylesheet" href="{% static 'css/estilo.css' %}">
+</head>
+
+<body>
+    
+      <form class="form-signin shadow p-3 bg-white rounded" method="POST">
+          <div class="text-center mb-4">
+              {% if titulo %}
+              <h1 class="h3 mb-3 font-weight-normal text-info">{{titulo}}</h1>
+              {% else %}
+              <h1 class="h3 mb-3 font-weight-normal text-info"><i class="fas fa-lock"></i> Autenticar</h1>
+              {% endif %}
+          </div>
+          <hr>
+        
+          {% csrf_token %}
+          
+          {{ form|crispy }}
+
+          {% if titulo %}
+          <button class="btn btn-lg btn-primary btn-block" type="submit">{{botao}}</button>
+          {% else %}
+          <button class="btn btn-lg btn-primary btn-block" type="submit">Entrar</button>
+          {% endif %}
+          <p class="mt-4 mb-2 text-info text-center">&copy; 2022 v.1.0</p>
+      </form>
+
+      <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+      <script>window.jQuery || document.write('<script src="/docs/4.5/assets/js/vendor/jquery.slim.min.js"><\/script>')</script>
+      <!-- <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.9.0/dist/feather.min.js"></script> -->
+      <script src="https://cdn.jsdelivr.net/npm/chart.js@2.7.3/dist/Chart.min.js"></script>
+      <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+      <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+      <!-- <script src="{% static 'js/dashboard.js' %}"></script> -->
+      <script src="{% static 'js/scripts.js' %}"></script>
+      </body>
+</html>
+
+

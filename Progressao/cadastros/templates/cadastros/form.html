@@ -1,0 +1,45 @@
+{% extends 'paginas/modelo.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block titulo %}
+<title>{{aba}}</title>
+{% endblock %}
+
+{% block conteudo %}
+
+<h3 class="mt-3">{{titulo}}</h3>
+
+<hr>
+
+<form action="" method="POST">
+
+    {% csrf_token %}
+
+    {{ form|crispy }}
+
+    <button type="submit" class="btn btn-primary btn-salvar-editar">Salvar</button>
+
+</form>
+
+{% endblock %}
+
+{% block scripts %}
+
+<script>
+    $(document).ready(function(){
+
+        $('#id_data_nascimento').mask('00/00/0000');
+        $('#id_celular').mask('00000-0000');
+        $('#id_data_partida').mask('00/00/0000');
+        $('#id_hora').mask('00:00');
+
+        // Carregar 10:00 por padrão
+        $('#id_hora').on('click', function(e) {
+            document.getElementById('id_hora').value = "10:00";
+        });
+
+    });
+</script>
+
+{% endblock %}

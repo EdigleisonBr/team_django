@@ -1,0 +1,155 @@
+{% extends 'paginas/modelo.html' %}
+
+{% block titulo %}
+<title>{{aba}}</title>
+{% endblock %}
+
+{% block conteudo %}
+
+    <div class="card-header text-center mt-3">
+        <h4 class=""><i class="fas fa-calendar-alt text-dark"></i> {{data|date:"d/m/Y"}} - Nonô  x {{time}}</h4>
+    </div>
+  
+    <div class="card-body">
+       
+        <div class="card-body text-center border rounded shadow-sm">
+            <h5 class="bg-success p-2 rounded">Clique no jogador para adicionar os gols</h5>
+            {% for atleta in atletas %}
+                <button type="button" class="btn btn-outline-dark m-2" onclick="adiciona_gols(this)" id="nome" value="{{atleta.id}}-{{atleta.nome}}-{{jogo}}">{{atleta.nome}} +</button>
+            {% endfor %}
+        </div>
+
+        <!-- Tabela com atleta / gols / botão_salvar -->
+        <form action="{% url 'cadastrar-gol' %}" id="salvar-form" method="GET">
+            
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <div class="card flex-md-row mb-4 shadow-sm h-md-250">
+                        <div class="card-body d-flex flex-column align-items-center">
+                            <table class="table table-dark w-50">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col" class="text-success">Atleta</th>
+                                            <th scope="col"><i class="far fa-futbol text-success"></i></th>
+                                        </tr>
+                                    </thead>
+                                <tbody id="lista"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card flex-md-row mb-3 shadow-sm h-md-250">
+                        <div class="card-body d-flex flex-column align-items-center">
+                            <div class="input-group mb-1">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text bg-dark"><i class="far fa-futbol text-danger"></i></span>
+                                      </div>
+                                    <span class="input-group-text bg-dark text-danger" id="basic-addon3">Gols Contra</span>
+                                    <input type="text" id="jogo_id" name="jogo_id" value="{{jogo}}" hidden>
+                                </div>
+                                <input type="number" class="form-control " aria-describedby="basic-addon3" id="gols_contra" name="gols_contra">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <input id="arrayId" name="arrayId" value="{{request.GET.arrayId}}" hidden>
+                <input id="arrayA" name="arrayA" value="{{request.GET.arrayA}}" hidden>
+                <input id="arrayG" name="arrayG" value="{{request.GET.arrayG}}" hidden>
+
+            </div>
+            <a href="#" name="salvar-gols"  id="salvar-gols" class="btn btn-primary" type="submit">Salvar</a>
+        </form>
+    </div>
+            
+{% endblock %}
+
+{% block scripts %}
+
+<script>
+
+var index = 0;
+var cont_gols_contra = 0
+var atleta_id = [];
+var atleta_nome = [];
+var atleta_gols = [];
+
+// Adiciona gols do atleta
+function adiciona_gols(obj){
+    var achou = 0;
+    var atleta = obj.value.split('-');
+    // atleta[0] = id
+    // atleta[1] = nome
+    // atleta[2] = id_jogo
+
+    // Quando for o primeiro atleta da lista
+    if (atleta_id.length == 0){
+        atleta_id.push(atleta[0]);
+        atleta_nome.push(atleta[1]);
+        atleta_gols.push(1);
+    }
+    else{
+        for (let i=0 ; i<= atleta_id.length ; i++){
+            if (atleta_id[i] == atleta[0]){
+                atleta_gols[i] = atleta_gols[i] + 1;
+                achou = 1;
+            }
+        }
+        if (achou == 0){
+            atleta_id.push(atleta[0])
+            atleta_nome.push(atleta[1])
+            atleta_gols.push(1)   
+        }
+    }
+
+    //Limpa a tabela de gols para carrega-lá carrega novamente
+    $('#lista').empty();
+
+    for (i=0 ; i < atleta_id.length ; i++){
+        index = [i]
+        $('#lista').append(
+            '<tr id="date' + index + '">' +
+            '   <td class="d-none">' + (parseInt(index)+1) + '</td>' +
+            '   <td>' + atleta_nome[i] + '</td>' +
+            '   <td>' + atleta_gols[i] + '</td>' +
+            '   <td class="text-center">' +
+            '       <i onclick="removeAtleta(\'' + index + '\')" class="fas fa-times text-danger"></i>' +
+            '   </td>' +
+            '</tr>'
+        );
+    }
+    
+    for ( i=0 ; i < atleta_id.length ; i++){
+        console.log('atleta_id: ',atleta_id[i], '- atleta_nome: ', atleta_nome[i], '- atleta_gols: ', atleta_gols[i])
+    }
+        
+    document.getElementById('arrayId').value = atleta_id;
+    document.getElementById('arrayA').value = atleta_nome;
+    document.getElementById('arrayG').value = atleta_gols;
+
+}
+
+// Remove atleta da listagem de gols
+function removeAtleta (index) {
+    console.log(index);
+    $('#date' + index).remove();
+    
+    atleta_id.splice(index, 1);
+    atleta_nome.splice(index, 1);
+    atleta_gols.splice(index, 1);
+
+    console.log('REMOVIDO')
+    for ( i=0 ; i < atleta_id.length ; i++){
+        console.log('atleta_id: ',atleta_id[i], '- atleta_nome: ', atleta_nome[i], '- atleta_gols: ', atleta_gols[i])
+    }
+
+    document.getElementById('arrayId').value = atleta_id;
+    document.getElementById('arrayA').value = atleta_nome;
+    document.getElementById('arrayG').value = atleta_gols; 
+}
+    
+</script>
+
+{% endblock %}

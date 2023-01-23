@@ -1,0 +1,47 @@
+{% extends 'paginas/modelo.html' %}
+
+{% block titulo %}
+<title>Gols</title>
+{% endblock %}
+
+{% block conteudo %}
+
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
+        <h1 class="h2">Gols</h1>
+    </div>
+
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li {% if message.tags %} class="alert alert-{{message.tags}}"{% endif %}>{{message}}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+        <div class="table-responsive">
+            <table class="table table-striped table-sm">
+                <thead>
+                    <tr>
+                        <th>Jogo</th>
+                        <th>Atleta</th>
+                        <th>Gols</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for gols_atleta in gols %}
+                    <tr>
+                        <td>{{gols_atleta.jogo}}</td>
+                        <td>{{gols_atleta.atleta}}</td>
+                        <td>{{gols_atleta.gols}}</td>
+                        <td>
+                            <a href="{% url 'editar-gol' gols_atleta.id %}" title="Editar"><span data-feather="edit" class="text-warning mr-2"></sp</a>
+                            <a href="{% url 'deletar-gol' gols_atleta.id %}" class="btn-deletar" title="Excluir"><span data-feather="trash-2" class="text-danger"></span></a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    
+{% endblock %}
